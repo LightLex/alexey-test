@@ -21,15 +21,24 @@
   </div>
     <div class="col-md-6 well-sm">
     {{pais}}
+    <div class="row">
+      <div class="col-md-12" style="height: 500px" id="map">
+        
+      </div>
+    </div>
   </div>
 </div>
 </div>
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+  <script src="https://maps.googleapis.com/maps/api/js?key={{API}}&libraries=places" async defer></script>
+
 
   <script>
 $( document ).ready(function() {
       var pais = "{{pais}}";
+
+      codeAddress(pais,4);
 
         var paises = ["India","Rusia","Panama","Colombia"];
 
@@ -57,8 +66,32 @@ $( document ).ready(function() {
 
 });
 
+var geocoder, map;
+
+function codeAddress(address,zoom) {
+    geocoder = new google.maps.Geocoder();
+    geocoder.geocode({
+        'address': address
+    }, function(results, status) {
+        if (status == google.maps.GeocoderStatus.OK) {
+            var myOptions = {
+                zoom: zoom,
+                center: results[0].geometry.location,
+                mapTypeId: google.maps.MapTypeId.ROADMAP
+            }
+            map = new google.maps.Map(document.getElementById("map"), myOptions);
+
+            var marker = new google.maps.Marker({
+                map: map,
+                position: results[0].geometry.location
+            });
+        }
+    });
+}
+
+
     function mapa(tabrow){
-      console.log($(tabrow).data("name"));
+      codeAddress($(tabrow).data("name"),7);
     }
 </script>
 </body>

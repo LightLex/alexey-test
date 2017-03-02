@@ -19,7 +19,7 @@ $app->get('/', function () use ($app) {
 
 $app->post('/respuesta', function (Request $request) use ($app) {
 	$pais = $request->get('pais');
-    return $app['twig']->render('respuesta.twig', array('pais' => $pais));
+    return $app['twig']->render('respuesta.twig', array('pais' => $pais,'API' => 'AIzaSyBEYqcWqugu6LnrtQWGDOGB8kmNfxcQupw'));
 });
 
 $app->run(); 
