@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <title>Busqueda</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+</head>
+<body>
+
+<div class="container well well-lg text-center">
+  <form class="form-inline" action="respuesta" method="POST">
+    <div class="form-group">
+      <label for="pais">Pais:</label>
+      <input type="text" class="form-control" id="pais" name="pais" list="list" autocomplete="off">
+      <datalist id='list'>
+        <option value="India" data-id="IND"></option>
+        <option value="Rusia" data-id="RUS"></option>
+        <option value="Panama" data-id="PMA"></option>
+        <option value="Colombia" data-id="COL"></option>
+      </datalist>
+    </div>
+  </form>
+</div>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+</body>
+</html>
