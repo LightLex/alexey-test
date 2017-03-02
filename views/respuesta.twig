@@ -10,18 +10,56 @@
 <body>
 
 <div class="container">
-<div><a class="btn" href="./">Regresar a la busqueda</a></div>
-{{pais}}
+<div><a class="btn btn-default" href="./">Regresar a la busqueda</a></div>
+<div class="row well-lg">
+  <div class="col-md-6 well-sm">
+    <table class="table" width="100%" id="tab">
+      <tbody>
+        
+      </tbody>
+    </table>
+  </div>
+    <div class="col-md-6 well-sm">
+    {{pais}}
+  </div>
 </div>
-<script>
-$( document ).ready(function() {
-        $.ajax({url: "demo_test.txt", success: function(result){
-        $("#div1").html(result);
-    }});
-});
-</script>
-
+</div>
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+
+  <script>
+$( document ).ready(function() {
+      var pais = "{{pais}}";
+
+        var paises = ["India","Rusia","Panama","Colombia"];
+
+        var codes = ["IND","RUS","PMA","COL"];
+
+        var id = null;
+
+          for (var i = paises.length - 1; i >= 0; i--) {
+            if(paises[i] === pais){
+              id = i;
+              break;
+            }
+          }
+
+          if(id === null)
+            id = 3;
+
+        $.ajax({url: "http://services.groupkt.com/state/get/"+codes[id]+"/all", 
+          success: function(result){
+                $.each(result.RestResponse.result, function() {
+                    $("#tab tbody").append('<tr class="child" onclick="mapa(this)" data-name="'+this.name+'"><td>'+this.name+'</td></tr>');
+                });
+    }});
+
+
+});
+
+    function mapa(tabrow){
+      console.log($(tabrow).data("name"));
+    }
+</script>
 </body>
 </html>
