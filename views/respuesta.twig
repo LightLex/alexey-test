@@ -25,48 +25,32 @@
       <div class="col-md-12" style="height: 500px" id="map">
         
       </div>
+      <div class="col-md-12">
+            <div class="row text-center">
+        <div class="col-xs-6">
+          <figure>
+            <img src="https://img.clipartfest.com/16882c2964cec42f09bc36bb12b14f71_male-clipart-male-clipart_228-587.png" alt="" width="10%" id="male">
+            <figcaption id="malet">Male</figcaption>
+          </figure>
+        </div>
+        <div class="row text-center">
+        <div class="col-xs-6">
+          <figure>
+            <img src="https://img.clipartfox.com/424ec32695f20bf8ed5e35b218662884_-art-projects-reports-and-female-art-projects-clipart_300-600.png" alt="" width="10%" id="female">
+            <figcaption id="femalet">Female</figcaption>
+          </figure>
+        </div>
+      </div>
     </div>
   </div>
 </div>
 </div>
+  <script src="https://maps.googleapis.com/maps/api/js?key={{API}}&libraries=places" async defer></script>
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
-  <script src="https://maps.googleapis.com/maps/api/js?key={{API}}&libraries=places" async defer></script>
-
-
   <script>
-$( document ).ready(function() {
-      var pais = "{{pais}}";
 
-      codeAddress(pais,4);
-
-        var paises = ["India","Rusia","Panama","Colombia"];
-
-        var codes = ["IND","RUS","PMA","COL"];
-
-        var id = null;
-
-          for (var i = paises.length - 1; i >= 0; i--) {
-            if(paises[i] === pais){
-              id = i;
-              break;
-            }
-          }
-
-          if(id === null)
-            id = 3;
-
-        $.ajax({url: "http://services.groupkt.com/state/get/"+codes[id]+"/all", 
-          success: function(result){
-                $.each(result.RestResponse.result, function() {
-                    $("#tab tbody").append('<tr class="child" onclick="mapa(this)" data-name="'+this.name+'"><td>'+this.name+'</td></tr>');
-                });
-    }});
-
-
-});
-
-var geocoder, map;
+  var geocoder, map;
 
 function codeAddress(address,zoom) {
     geocoder = new google.maps.Geocoder();
@@ -88,6 +72,56 @@ function codeAddress(address,zoom) {
         }
     });
 }
+
+var male = 0,female = 0;
+
+$( document ).ready(function() {
+      var pais = "{{pais}}";
+
+      codeAddress(pais,4);
+
+      if(pais === "India")
+          codes = "IND";
+        else
+          codes = "PMA";
+
+        $.ajax({url: "http://services.groupkt.com/state/get/"+codes+"/all", 
+          success: function(result){
+                $.each(result.RestResponse.result, function() {
+                    $("#tab tbody").append('<tr class="child" onclick="mapa(this)" data-name="'+this.name+'"><td>'+this.name+'</td></tr>');
+                });
+        }});
+
+        $.ajax({url: "http://api.population.io:80/1.0/life-expectancy/total/male/{{pais}}/1980-01-10/", 
+            success: function(result){
+                male = result.total_life_expectancy;
+                setimg();
+    }});
+        $.ajax({url: "http://api.population.io:80/1.0/life-expectancy/total/female/{{pais}}/1980-01-10/", 
+            success: function(result){
+                female = result.total_life_expectancy;
+                setimg();
+    }});
+
+
+});
+
+    function setimg(){
+      console.log(male);
+      console.log(female);
+      if(male == 0 || female == 0){
+
+      }else{
+        if(male > female){
+          $("#male").css("width", '20%');
+        }else
+        {
+          $("#female").css("width", '20%');
+        }
+        $("#malet").text('Male '+ male);
+        $("#femalet").text('Female ' + female);
+      }
+    }
 
 
     function mapa(tabrow){
